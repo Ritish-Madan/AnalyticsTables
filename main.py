@@ -1,11 +1,15 @@
 import pandas as pd
-import pymssql
+# import pymssql
+from MatchServiceAnalysis import service_analysis
 
 # conn = pymssql.connect('stupa-testdb.cf0xlnbvxxos.us-east-1.rds.amazonaws.com',
 #                        'admin',
 #                        'stupa-ai-dev1',
 #                        'StupaAiProdDb')
-primaryData = pd.read_csv('finalData.csv')  # importing Primary Data
+#
+# cursor = conn.cursor()
+
+primaryData = pd.read_csv('match3.csv')  # importing Primary Data
 uniqueMatches = primaryData['Match_No'].unique()
 tempPrimaryData = []
 for match in uniqueMatches:
@@ -18,4 +22,9 @@ for match in uniqueMatches:
     matchDict['Player_B_Name'] = uniqueMatchData.iloc[0]['Player_B_Name']
     matchDict['MatchType'] = uniqueMatchData.iloc[0]['MatchType']
     tempPrimaryData.append(matchDict)
+
+
+for data in tempPrimaryData:
+    service_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'])
+
 
