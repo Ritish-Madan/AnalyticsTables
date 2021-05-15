@@ -236,6 +236,22 @@ def service_analysis(match_no, main_a, other_b):
 
     # Other
 
+    DataType = 'Other'
+    MatchNoCondition = PrimaryData['Match_No'] == match_no
+    wonBy_A_Condition = PrimaryData['WON_BY'] == main_a
+    shotLeftCondition = PrimaryData['Shot'].str[:2] != 'FH'
+    shotLeftCondition2 = PrimaryData['Shot'].str[:2] != 'BH'
+    winningData = PrimaryData[MatchNoCondition & wonBy_A_Condition & (shotLeftCondition & shotLeftCondition2)]
+    WinPoints = []
+    for i, row in winningData.iterrows():
+        WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+    WinPoints = set(WinPoints)
+    DataCount = len(PointShot & WinPoints)
+    data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+    for i in range(len(columns)):
+        MatchAnalysis[columns[i]].append(data[i])
+
+    # Total Other
 
 
 
