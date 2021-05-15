@@ -9,7 +9,7 @@ from MatchServiceAnalysis import service_analysis
 #
 # cursor = conn.cursor()
 
-primaryData = pd.read_csv('match3.csv')  # importing Primary Data
+primaryData = pd.read_csv('finalData.csv')  # importing Primary Data
 uniqueMatches = primaryData['Match_No'].unique()
 tempPrimaryData = []
 for match in uniqueMatches:

@@ -1,7 +1,7 @@
 # import pymssql
 import pandas as pd
 import numpy as np
-PrimaryData = pd.read_csv('match3.csv')
+PrimaryData = pd.read_csv('finalData.csv')
 # conn = pymssql.connect('stupa-testdb.cf0xlnbvxxos.us-east-1.rds.amazonaws.com',
 #                        'admin',
 #                        'stupa-ai-dev1',
@@ -94,14 +94,61 @@ def service_analysis(match_no, main_a, other_b):
         data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
         for i in range(len(columns)):
             MatchAnalysis[columns[i]].append(data[i])
-
     # Won Long
+    DataType = 'WonLong'
+    DataSubType = 'NA'
 
+    # Primary Data filter condition
+    MatchCondition = PrimaryData['Match_No'] == match_no
+    ServiceByCondition = PrimaryData['SERVICE_BY'] == 'Y'
+    player_a_playedCondition = PrimaryData['Played_by'] == main_a
+    shotNoCondition = PrimaryData['Shot_no'] == 1
+    shotCondition0 = PrimaryData['Shot_no'] == 0
+    shotRightCondition = PrimaryData['Shot'].str[-1] == 'L'
+    required = PrimaryData[shotRightCondition & MatchCondition & ServiceByCondition & player_a_playedCondition & (shotNoCondition | shotCondition0)]
+    PointShot = []
+    for i, row in required.iterrows():
+        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+    PointShot = set(PointShot)
+    # WinPoints declared in Point Won on Service
+    DataCount = len(PointShot & WinPoints) # Total Matching String
+    data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+    for i in range(len(columns)):
+        MatchAnalysis[columns[i]].append(data[i])
 
+    # Total WonLong
 
+    DataType = 'TotalWonLong'
+    # Won By Condition filtering
+    MatchNoCondition = PrimaryData['Match_No'] == match_no
+    wonBy_A_Condition = PrimaryData['WON_BY'] == main_a
+    wonBy_B_Condition = PrimaryData['WON_BY'] == other_b
+    winningData = PrimaryData[MatchNoCondition & (wonBy_A_Condition | wonBy_B_Condition)]
+    WinPoints = []
+    for i, row in winningData.iterrows():
+        WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+    WinPoints = set(WinPoints)
 
+    # Primary Data filter
+    MatchCondition = PrimaryData['Match_No'] == match_no
+    ServiceByCondition = PrimaryData['SERVICE_BY'] == 'Y'
+    player_a_playedCondition = PrimaryData['Played_by'] == main_a
+    shotNoCondition = PrimaryData['Shot_no'] == 1
+    shotCondition0 = PrimaryData['Shot_no'] == 0
+    shotRightCondition = PrimaryData['Shot'].str[-1] == 'S'
+    required = PrimaryData[shotRightCondition & MatchCondition & ServiceByCondition & player_a_playedCondition & (
+                shotNoCondition | shotCondition0)]
+    PointShot = []
+    for i, row in required.iterrows():
+        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+    PointShot = set(PointShot)
 
+    DataCount = len(PointShot & WinPoints)
+    data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+    for i in range(len(columns)):
+        MatchAnalysis[columns[i]].append(data[i])
 
+    # Backhand
 
 
 
