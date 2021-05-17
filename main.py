@@ -25,6 +25,4 @@ for match in uniqueMatches:
 
 
 for data in tempPrimaryData:
-    service_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'])
-
-
+    temp = service_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'])
