@@ -5,31 +5,28 @@ class MatchFilter:
                  main_player,
                  right_shot=None,
                  other_player=None,
-                 shot1=1,
-                 shot0=0,
-                 serv='Y'):
+                 shot=2,
+                 rec='Y'):
 
         self.PrimaryData = data
         self.match_no = match_no
         self.main_player = main_player
         self.right_shot = right_shot
         self.other_player = other_player
-        self.shot1 = shot1
-        self.shot0 = shot0
-        self.serv = serv
+        self.shot = shot
+        self.rec = rec
 
     def normal(self):
         match = self.PrimaryData['Match_No'] == self.match_no
-        service = self.PrimaryData['SERVICE_BY'] == self.serv
+        service = self.PrimaryData['RECEIVE'] == self.rec
         main_played = self.PrimaryData['Played_by'] == self.main_player
-        shot1 = self.PrimaryData['Shot_no'] == self.shot1
-        shot0 = self.PrimaryData['Shot_no'] == self.shot0
-        required = self.PrimaryData[match & service & main_played & (shot1 | shot0)]
+        shot = self.PrimaryData['Shot_no'] == self.shot
+        required = self.PrimaryData[match & service & main_played & shot]
         return required
 
     def rshot(self):
         norm = self.normal()
-        right = norm['Shot'].str[-1] == self.right_shot
+        right = norm['Placement'].str[-1] == self.right_shot
         right_condition = norm[right]
         return right_condition
 

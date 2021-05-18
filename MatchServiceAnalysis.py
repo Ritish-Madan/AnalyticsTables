@@ -10,7 +10,7 @@ PrimaryData = pd.read_csv('finalData.csv')
 #
 # cursor = conn.cursor()
 
-def service_analysis(match_no, main_a, other_b):
+def service_analysis(match_no, main_player, other_player):
     # TODO: Remove these comments
     #Payas Jain Player ID: 13
     # Shubh Goel Player ID: 26
@@ -32,8 +32,9 @@ def service_analysis(match_no, main_a, other_b):
 
 
     DataSubType = 'NA'
-    DataType = 'TotalPoint'
-    player_a_norm = MatchFilter(PrimaryData, match_no, main_a)
+    point = 'TotalPoint'
+    DataType = point
+    player_a_norm = MatchFilter(PrimaryData, match_no, main_player)
     normal_filter = player_a_norm.normal()
     DataCount = len(normal_filter)
     data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
@@ -49,7 +50,7 @@ def service_analysis(match_no, main_a, other_b):
     PointShot = set(PointShot)
 
     # player_a Win
-    pl_a_win = MatchWon(PrimaryData, match_no, main_a)
+    pl_a_win = MatchWon(PrimaryData, match_no, main_player)
     winningData = pl_a_win.normal()
 
     WinPoints = []
@@ -95,7 +96,7 @@ def service_analysis(match_no, main_a, other_b):
     DataType = 'WonLong'
     DataSubType = 'NA'
 
-    rshot = MatchFilter(PrimaryData, match_no, main_a, 'L')
+    rshot = MatchFilter(PrimaryData, match_no, main_player, 'L')
     rightShotFilter = rshot.rshot()
     PointShot = []
     for i, row in rightShotFilter.iterrows():
@@ -108,14 +109,14 @@ def service_analysis(match_no, main_a, other_b):
 
     # Total WonLong
     DataType = 'TotalWonLong'
-    bothwin = MatchWon(PrimaryData, match_no, main_a, other_b)
+    bothwin = MatchWon(PrimaryData, match_no, main_player, other_player)
     bothWinFilter = bothwin.bothWin()
     WinPoints = []
     for i, row in bothWinFilter.iterrows():
         WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
     WinPoints = set(WinPoints)
 
-    RShot_S = MatchFilter(PrimaryData, match_no, main_a, 'S')
+    RShot_S = MatchFilter(PrimaryData, match_no, main_player, 'S')
     rShot_S = RShot_S.rshot()
     PointShot = []
     for i, row in rShot_S.iterrows():
@@ -130,7 +131,7 @@ def service_analysis(match_no, main_a, other_b):
     # Backhand
     DataType = 'Backhand'
 
-    leftWin = MatchWon(PrimaryData, match_no, main_a, None, 'BH')
+    leftWin = MatchWon(PrimaryData, match_no, main_player, None, 'BH')
     left_win_BH = leftWin.leftShot()
     WinPoints = []
     for i, row in left_win_BH.iterrows():
@@ -150,7 +151,7 @@ def service_analysis(match_no, main_a, other_b):
 
     # Total Backhand
     DataType = 'TotalBackhand'
-    both_Win_BH = MatchWon(PrimaryData, match_no, main_a, other_b, 'BH')
+    both_Win_BH = MatchWon(PrimaryData, match_no, main_player, other_player, 'BH')
     bothWinLeft_BH = both_Win_BH.bothWinLeft()
     WinPoints = []
     for i, row in bothWinLeft_BH.iterrows():
@@ -163,7 +164,7 @@ def service_analysis(match_no, main_a, other_b):
 
     # Forehand
     DataType = 'Forehand'
-    leftWinFH = MatchWon(PrimaryData, match_no, main_a, None, 'FH')
+    leftWinFH = MatchWon(PrimaryData, match_no, main_player, None, 'FH')
     left_win_FH = leftWinFH.leftShot()
     WinPoints = []
     for i, row in left_win_FH.iterrows():
@@ -177,7 +178,7 @@ def service_analysis(match_no, main_a, other_b):
     #Total Forehand
 
     DataType ='TotalForehand'
-    both_Win_FH = MatchWon(PrimaryData, match_no, main_a, other_b, 'FH')
+    both_Win_FH = MatchWon(PrimaryData, match_no, main_player, other_player, 'FH')
     bothWinLeft_FH = both_Win_FH.bothWinLeft()
     WinPoints = []
     for i, row in bothWinLeft_FH.iterrows():
@@ -192,7 +193,7 @@ def service_analysis(match_no, main_a, other_b):
     # Other
 
     DataType = 'Other'
-    otherWin_LH_BH = MatchWon(PrimaryData, match_no, main_a, None, 'FH', 'BH')
+    otherWin_LH_BH = MatchWon(PrimaryData, match_no, main_player, None, 'FH', 'BH')
     other_LH_BH = otherWin_LH_BH.leftOtherShot()
     WinPoints = []
     for i, row in other_LH_BH.iterrows():
@@ -207,8 +208,8 @@ def service_analysis(match_no, main_a, other_b):
     DataType = 'TotalOther'
     # Won By Condition filtering
     MatchNoCondition = PrimaryData['Match_No'] == match_no
-    wonBy_A_Condition = PrimaryData['WON_BY'] == main_a
-    wonBy_B_Condition = PrimaryData['WON_BY'] == other_b
+    wonBy_A_Condition = PrimaryData['WON_BY'] == main_player
+    wonBy_B_Condition = PrimaryData['WON_BY'] == other_player
     shotLeftCondition = PrimaryData['Shot'].str[:2] != 'FH'
     shotLeftCondition2 = PrimaryData['Shot'].str[:2] != 'BH'
     winningData = PrimaryData[shotLeftCondition2 & shotLeftCondition & MatchNoCondition & (wonBy_A_Condition | wonBy_B_Condition)]
@@ -220,6 +221,6 @@ def service_analysis(match_no, main_a, other_b):
     data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
     for i in range(len(columns)):
         MatchAnalysis[columns[i]].append(data[i])
-
+    return MatchAnalysis
 
 

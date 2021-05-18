@@ -1,6 +1,7 @@
 import pandas as pd
 # import pymssql
 from MatchServiceAnalysis import service_analysis
+from MatchReceiveAnalysis import receive_analysis
 
 # conn = pymssql.connect('stupa-testdb.cf0xlnbvxxos.us-east-1.rds.amazonaws.com',
 #                        'admin',
@@ -25,4 +26,9 @@ for match in uniqueMatches:
 
 
 for data in tempPrimaryData:
-    temp = service_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'])
+    # Player A Service
+    serviceData1 = service_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'])
+    # Player B Service
+    serviceData2 = service_analysis(data['Match_No'], data['Player_B_Name'], data['Player_A_Name'])
+    # Player A Receive
+    ReceiveData1 = receive_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name']);
