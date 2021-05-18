@@ -10,7 +10,7 @@ PrimaryData = pd.read_csv('finalData.csv')
 #
 # cursor = conn.cursor()
 
-def service_analysis(match_no, main_player, other_player):
+def analysis(match_no, main_player, other_player, analysis_type):
     # TODO: Remove these comments
     #Payas Jain Player ID: 13
     # Shubh Goel Player ID: 26
@@ -27,14 +27,19 @@ def service_analysis(match_no, main_player, other_player):
     # TODO: Access the PlayerID from the player_a_details in main.py of loop
     # Same variables for main_a
     PlayerId = 13
-    AnalysisType = 'Service'
-    Shot_no = '0,1'
+    AnalysisType = analysis_type
+    Shot_no = None
+    if(analysis_type == 'Service'):
+        Shot_no = '0,1'
+    elif(analysis_type == 'Receive'):
+        Shot_no = '2'
+
 
 
     DataSubType = 'NA'
     point = 'TotalPoint'
     DataType = point
-    player_a_norm = MatchFilter(PrimaryData, match_no, main_player)
+    player_a_norm = MatchFilter(PrimaryData, match_no, main_player, analysis_type)
     normal_filter = player_a_norm.normal()
     DataCount = len(normal_filter)
     data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
@@ -96,7 +101,7 @@ def service_analysis(match_no, main_player, other_player):
     DataType = 'WonLong'
     DataSubType = 'NA'
 
-    rshot = MatchFilter(PrimaryData, match_no, main_player, 'L')
+    rshot = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'L')
     rightShotFilter = rshot.rshot()
     PointShot = []
     for i, row in rightShotFilter.iterrows():
@@ -116,7 +121,7 @@ def service_analysis(match_no, main_player, other_player):
         WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
     WinPoints = set(WinPoints)
 
-    RShot_S = MatchFilter(PrimaryData, match_no, main_player, 'L')
+    RShot_S = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'L')
     rShot_S = RShot_S.rshot()
     PointShot = []
     for i, row in rShot_S.iterrows():
@@ -133,7 +138,7 @@ def service_analysis(match_no, main_player, other_player):
     DataType = 'WonShort'
     DataSubType = 'NA'
 
-    rshot = MatchFilter(PrimaryData, match_no, main_player, 'S')
+    rshot = MatchFilter(PrimaryData, match_no, main_player,analysis_type, 'S')
     rightShotFilter = rshot.rshot()
     PointShot = []
     for i, row in rightShotFilter.iterrows():
@@ -160,7 +165,7 @@ def service_analysis(match_no, main_player, other_player):
         WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
     WinPoints = set(WinPoints)
 
-    RShot_S = MatchFilter(PrimaryData, match_no, main_player, 'S')
+    RShot_S = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'S')
     rShot_S = RShot_S.rshot()
     PointShot = []
     for i, row in rShot_S.iterrows():

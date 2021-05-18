@@ -3,35 +3,43 @@ class MatchFilter:
                  data,
                  match_no,
                  main_player,
+                 analysis_type,
                  right_shot=None,
                  other_player=None,
-                 shot1=1,
-                 shot0=0,
-                 serv='Y'):
+                 ):
 
         self.PrimaryData = data
         self.match_no = match_no
         self.main_player = main_player
+        self.type = analysis_type
         self.right_shot = right_shot
         self.other_player = other_player
-        self.shot1 = shot1
-        self.shot0 = shot0
-        self.serv = serv
 
     def normal(self):
         match = self.PrimaryData['Match_No'] == self.match_no
-        service = self.PrimaryData['SERVICE_BY'] == self.serv
         main_played = self.PrimaryData['Played_by'] == self.main_player
-        shot1 = self.PrimaryData['Shot_no'] == self.shot1
-        shot0 = self.PrimaryData['Shot_no'] == self.shot0
-        required = self.PrimaryData[match & service & main_played & (shot1 | shot0)]
-        return required
+        if(self.type == 'Service'):
+            service = self.PrimaryData['SERVICE_BY'] == 'Y'
+            shot1 = self.PrimaryData['Shot_no'] == 0
+            shot0 = self.PrimaryData['Shot_no'] == 1
+            required = self.PrimaryData[match & service & main_played & (shot1 | shot0)]
+            return required
+        elif(self.type == 'Receive'):
+            receive = self.PrimaryData['RECEIVE'] == 'Y'
+            shot = self.PrimaryData['Shot_no'] == 2
+            required = self.PrimaryData[match & receive & main_played & shot]
+            return required
 
     def rshot(self):
         norm = self.normal()
-        right = norm['Shot'].str[-1] == self.right_shot
-        right_condition = norm[right]
-        return right_condition
+        if (self.type == 'Service'):
+            right = norm['Shot'].str[-1] == self.right_shot
+            right_condition = norm[right]
+            return right_condition
+        elif (self.type == 'Receive'):
+            right = norm['Placement'].str[-1] == self.right_shot
+            right_condition = norm[right]
+            return right_condition
 
 
 
