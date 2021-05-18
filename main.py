@@ -30,4 +30,6 @@ for data in tempPrimaryData:
     # Player B Service
     serviceData2 = analysis(data['Match_No'], data['Player_B_Name'], data['Player_A_Name'], 'Service')
     # Player A Receive
-    ReceiveData1 = analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'], 'Receive');
+    ReceiveData1 = analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'], 'Receive')
+    # Player B Receive
+    ReceiveData2 = analysis(data['Match_No'], data['Player_B_Name'], data['Player_A_Name'], 'Receive')

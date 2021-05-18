@@ -121,13 +121,7 @@ def analysis(match_no, main_player, other_player, analysis_type):
         WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
     WinPoints = set(WinPoints)
 
-    RShot_S = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'L')
-    rShot_S = RShot_S.rshot()
-    PointShot = []
-    for i, row in rShot_S.iterrows():
-        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
-    PointShot = set(PointShot)
-
+    # Point Shot from WonLong
     DataCount = len(PointShot & WinPoints)
     data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
     for i in range(len(columns)):
@@ -165,19 +159,54 @@ def analysis(match_no, main_player, other_player, analysis_type):
         WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
     WinPoints = set(WinPoints)
 
-    RShot_S = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'S')
-    rShot_S = RShot_S.rshot()
-    PointShot = []
-    for i, row in rShot_S.iterrows():
-        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
-    PointShot = set(PointShot)
-
+    # Point Shot from WonShort
     DataCount = len(PointShot & WinPoints)
     data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
     for i in range(len(columns)):
         MatchAnalysis[columns[i]].append(data[i])
 
-    #################
+    # Medium ShotWon
+    if(analysis_type == 'Receive'):
+        # Won Medium
+        DataType = 'WonMedium'
+        rshot_H = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'H')
+        rightShotFilter = rshot_H.rshot()
+        PointShot = []
+        for i, row in rightShotFilter.iterrows():
+            PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+        PointShot = set(PointShot)
+
+        WinPoints = []
+        # Winning data -> Normal Win Filter
+        for i, row in winningData.iterrows():
+            WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+
+        WinPoints = set(WinPoints)
+        DataCount = len(PointShot & WinPoints)  # Total Matching String
+        data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+        for i in range(len(columns)):
+            MatchAnalysis[columns[i]].append(data[i])
+
+        # Total Won Medium
+        DataType = 'TotalWonShort'
+        bothwin = MatchWon(PrimaryData, match_no, main_player, other_player)
+        bothWinFilter = bothwin.bothWin()
+        WinPoints = []
+        for i, row in bothWinFilter.iterrows():
+            WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+        WinPoints = set(WinPoints)
+
+        RShot_H = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'H')
+        rShot_H = RShot_H.rshot()
+        PointShot = []
+        for i, row in rShot_H.iterrows():
+            PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+        PointShot = set(PointShot)
+
+        DataCount = len(PointShot & WinPoints)
+        data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+        for i in range(len(columns)):
+            MatchAnalysis[columns[i]].append(data[i])
 
     # Backhand
     DataType = 'Backhand'
