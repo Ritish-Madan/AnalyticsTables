@@ -116,6 +116,50 @@ def service_analysis(match_no, main_player, other_player):
         WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
     WinPoints = set(WinPoints)
 
+    RShot_S = MatchFilter(PrimaryData, match_no, main_player, 'L')
+    rShot_S = RShot_S.rshot()
+    PointShot = []
+    for i, row in rShot_S.iterrows():
+        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+    PointShot = set(PointShot)
+
+    DataCount = len(PointShot & WinPoints)
+    data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+    for i in range(len(columns)):
+        MatchAnalysis[columns[i]].append(data[i])
+
+    #################
+    # Won Short
+    DataType = 'WonShort'
+    DataSubType = 'NA'
+
+    rshot = MatchFilter(PrimaryData, match_no, main_player, 'S')
+    rightShotFilter = rshot.rshot()
+    PointShot = []
+    for i, row in rightShotFilter.iterrows():
+        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+    PointShot = set(PointShot)
+
+    WinPoints = []
+    # Winning data -> Normal Win Filter
+    for i, row in winningData.iterrows():
+        WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+
+    WinPoints = set(WinPoints)
+    DataCount = len(PointShot & WinPoints) # Total Matching String
+    data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+    for i in range(len(columns)):
+        MatchAnalysis[columns[i]].append(data[i])
+
+    # Total WonShort
+    DataType = 'TotalWonShort'
+    bothwin = MatchWon(PrimaryData, match_no, main_player, other_player)
+    bothWinFilter = bothwin.bothWin()
+    WinPoints = []
+    for i, row in bothWinFilter.iterrows():
+        WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+    WinPoints = set(WinPoints)
+
     RShot_S = MatchFilter(PrimaryData, match_no, main_player, 'S')
     rShot_S = RShot_S.rshot()
     PointShot = []
@@ -127,6 +171,8 @@ def service_analysis(match_no, main_player, other_player):
     data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
     for i in range(len(columns)):
         MatchAnalysis[columns[i]].append(data[i])
+
+    #################
 
     # Backhand
     DataType = 'Backhand'

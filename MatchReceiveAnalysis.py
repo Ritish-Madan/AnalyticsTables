@@ -107,7 +107,28 @@ def receive_analysis(match_no, main_player, other_player):
     for i in range(len(columns)):
         MatchAnalysis[columns[i]].append(data[i])
 
+    # Total Won Long
+    DataType = 'TotalWonLong'
+    DataSubType = 'NA'
+    bothwin = MatchWon(PrimaryData, match_no, main_player, other_player)
+    bothWinFilter = bothwin.bothWin()
+    WinPoints = []
+    for i, row in bothWinFilter.iterrows():
+        WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+    WinPoints = set(WinPoints)
 
+    RShot_S = MatchFilter(PrimaryData, match_no, main_player, 'L')
+    rShot_S = RShot_S.rshot()
+    PointShot = []
+    for i, row in rShot_S.iterrows():
+        PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+    PointShot = set(PointShot)
+
+    DataCount = len(PointShot & WinPoints)
+    data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+    for i in range(len(columns)):
+        MatchAnalysis[columns[i]].append(data[i])
+    print(MatchAnalysis)
 
 
 

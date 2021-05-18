@@ -32,3 +32,4 @@ for data in tempPrimaryData:
     serviceData2 = service_analysis(data['Match_No'], data['Player_B_Name'], data['Player_A_Name'])
     # Player A Receive
     ReceiveData1 = receive_analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name']);
+    # print(serviceData1)
