@@ -244,6 +244,18 @@ def analysis(match_no, main_player, other_player, analysis_type):
         for i in range(len(columns)):
             MatchAnalysis[columns[i]].append(data[i])
 
+        # TODO: To be removed in the next push
+        # SQL Query for confirmation
+        #########################################################
+
+        # select count(Won_By) from tbl_Primary_Database where Match_No=717
+        # and WON_BY in ('Payas Jain', 'Shubh Goel') and cast(POINT as varchar) + '-' +
+        # cast(Game as varchar) IN (select cast(POINT as varchar) + '-' + cast(Game as varchar)
+        # from tbl_Primary_Database WHERE SERVICE_BY = 'Y' and right(SHOT, 2) = 'SO'
+        # and Match_No = 717 and Shot_no in (0, 1) and Played_by = 'Payas Jain')
+
+        ########################################################
+
 
     # Backhand
     DataType = 'Backhand'
