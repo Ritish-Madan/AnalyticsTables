@@ -165,7 +165,7 @@ def analysis(match_no, main_player, other_player, analysis_type):
     for i in range(len(columns)):
         MatchAnalysis[columns[i]].append(data[i])
 
-    # Medium ShotWon
+    # Medium ShotWon (Receive)
     if(analysis_type == 'Receive'):
         # Won Medium
         DataType = 'WonMedium'
@@ -188,7 +188,7 @@ def analysis(match_no, main_player, other_player, analysis_type):
             MatchAnalysis[columns[i]].append(data[i])
 
         # Total Won Medium
-        DataType = 'TotalWonShort'
+        DataType = 'TotalWonMedium'
         bothwin = MatchWon(PrimaryData, match_no, main_player, other_player)
         bothWinFilter = bothwin.bothWin()
         WinPoints = []
@@ -207,6 +207,43 @@ def analysis(match_no, main_player, other_player, analysis_type):
         data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
         for i in range(len(columns)):
             MatchAnalysis[columns[i]].append(data[i])
+
+    # Service Medium Shot Won
+    if(analysis_type == 'Service'):
+        # Won Long (Service)
+        DataType = 'WonMedium'
+        rshot_SO = MatchFilter(PrimaryData, match_no, main_player, analysis_type, 'SO')
+        rightShotFilter = rshot_SO.rshot()
+        PointShot = []
+        for i, row in rightShotFilter.iterrows():
+            PointShot.append(str(row['POINT']) + '-' + str(row['Game']))
+        PointShot = set(PointShot)
+
+        WinPoints = []
+        # Winning data -> Normal Win Filter
+        for i, row in winningData.iterrows():
+            WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+
+        WinPoints = set(WinPoints)
+        DataCount = len(PointShot & WinPoints)  # Total Matching String
+        data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+        for i in range(len(columns)):
+            MatchAnalysis[columns[i]].append(data[i])
+
+        # Total Won Medium
+        DataType = 'TotalWonMedium'
+        bothwin = MatchWon(PrimaryData, match_no, main_player, other_player)
+        bothWinFilter = bothwin.bothWin()
+        WinPoints = []
+        for i, row in bothWinFilter.iterrows():
+            WinPoints.append(str(row['POINT']) + '-' + str(row['Game']))
+        WinPoints = set(WinPoints)
+
+        DataCount = len(PointShot & WinPoints)
+        data = [AnalysisType, MatchId, PlayerId, Shot_no, DataType, DataSubType, DataCount]
+        for i in range(len(columns)):
+            MatchAnalysis[columns[i]].append(data[i])
+
 
     # Backhand
     DataType = 'Backhand'

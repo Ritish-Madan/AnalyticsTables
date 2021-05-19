@@ -33,9 +33,14 @@ class MatchFilter:
     def rshot(self):
         norm = self.normal()
         if (self.type == 'Service'):
-            right = norm['Shot'].str[-1] == self.right_shot
-            right_condition = norm[right]
-            return right_condition
+            if(self.right_shot == 'SO'):
+                right = norm['Shot'].str[-2:] == self.right_shot
+                right_condition = norm[right]
+                return right_condition
+            else:
+                right = norm['Shot'].str[-1] == self.right_shot
+                right_condition = norm[right]
+                return right_condition
         elif (self.type == 'Receive'):
             right = norm['Placement'].str[-1] == self.right_shot
             right_condition = norm[right]
