@@ -1,4 +1,5 @@
 import pandas as pd
+from MatchAnalysisStats import analysis_stats
 # import pymssql
 from MatchAnalysis import analysis
 
@@ -33,3 +34,5 @@ for data in tempPrimaryData:
     ReceiveData1 = analysis(data['Match_No'], data['Player_A_Name'], data['Player_B_Name'], 'Receive')
     # Player B Receive
     ReceiveData2 = analysis(data['Match_No'], data['Player_B_Name'], data['Player_A_Name'], 'Receive')
+    # Match Analysis Stats
+    Match_stats1 = analysis_stats(data['Match_No'], data['PLAYERA_ID'], 1, data['Player_A_Name'])
