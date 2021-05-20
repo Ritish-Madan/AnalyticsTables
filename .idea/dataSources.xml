@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="StupaAnalytics" uuid="fc69f913-7b74-4675-aeae-2cac9f87b577">
+    <data-source source="LOCAL" name="StupaAnalytics" check-outdated="false" uuid="fc69f913-7b74-4675-aeae-2cac9f87b577">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <remarks>AirProDB</remarks>
