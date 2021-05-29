@@ -299,7 +299,9 @@ def analysis_stats(match_no, player_no, player_type, player_name):
     uniqueSLPlacements = notnullErrorFilter['Second_Last_Placement'].unique()
     notnullPlacements = dict(notnullErrorFilter['Second_Last_Placement'].value_counts())
     ErrorRatePlacement = {}
+    # Complete data without placement filter
     shotnot0Filter = PrimaryData[matchCondition & playedByCondition & (PrimaryData['Shot_no'] > 0)]
+    # Fetch Total Count on Placement = Second_Last_placement
     for placement in uniqueSLPlacements:
         eachSame = shotnot0Filter[shotnot0Filter['Placement'] == placement]
         # print(placement, sum(eachSame))
@@ -464,6 +466,7 @@ def analysis_stats(match_no, player_no, player_type, player_name):
     playerFilter = PrimaryData[matchCondition & playedByCondition]
     # TODO: Add to Dataframe
     MostUsedStroke = playerFilter['Shot'].value_counts().keys()[0]
+    print(MostUsedStroke)
 
 
 
